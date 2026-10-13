@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'tezpurassam2024@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128;
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Admins collection
+    match /admins/{uid} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Properties: public read for published, admin full access
+    match /properties/{propertyId} {
+      allow read: if (resource.data.publicationStatus == 'published') || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Enquiries: anyone can submit, customer can read own, admin can read/manage all
+    match /enquiries/{enquiryId} {
+      allow create: if request.resource.data.customerEmail is string &&
+                       request.resource.data.customerName is string &&
+                       request.resource.data.message is string;
+      allow read: if isAdmin() || (isSignedIn() && resource.data.customerUid == request.auth.uid);
+      allow update: if isAdmin() || (isSignedIn() && resource.data.customerUid == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // Appointments: site visits
+    match /appointments/{appointmentId} {
+      allow create: if request.resource.data.propertyId is string &&
+                       request.resource.data.customerEmail is string;
+      allow read: if isAdmin() || (isSignedIn() && resource.data.customerUid == request.auth.uid);
+      allow update: if isAdmin() || (isSignedIn() && resource.data.customerUid == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // Saved Properties: user specific
+    match /savedProperties/{savedId} {
+      allow read: if isSignedIn() && (resource.data.customerUid == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.customerUid == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.customerUid == request.auth.uid;
+      allow delete: if isSignedIn() && (resource.data.customerUid == request.auth.uid || isAdmin());
+    }
+
+    // Agents
+    match /agents/{agentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Testimonials
+    match /testimonials/{testimonialId} {
+      allow read: if (resource.data.approved == true) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Site Settings
+    match /siteSettings/{settingsId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Test connection doc for initial boot
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}

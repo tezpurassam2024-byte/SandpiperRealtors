@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "Property": {
+      "title": "Property",
+      "description": "Real estate listing record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "slug": { "type": "string", "maxLength": 200 },
+        "referenceNumber": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 10000 },
+        "propertyType": { "type": "string", "enum": ["apartment", "house", "villa", "plot", "commercial", "office", "retail", "penthouse"] },
+        "listingType": { "type": "string", "enum": ["sale", "rent", "commercial", "new-development"] },
+        "price": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 10 },
+        "location": { "type": "object", "description": "Structured location details" },
+        "bedrooms": { "type": "number" },
+        "bathrooms": { "type": "number" },
+        "area": { "type": "number" },
+        "areaUnit": { "type": "string", "maxLength": 20 },
+        "amenities": { "type": "array" },
+        "furnishingStatus": { "type": "string", "enum": ["furnished", "semi-furnished", "unfurnished"] },
+        "constructionStatus": { "type": "string", "enum": ["ready-to-move", "under-construction", "new-launch"] },
+        "parkingSpaces": { "type": "number" },
+        "images": { "type": "array" },
+        "floorPlans": { "type": "array" },
+        "brochureUrl": { "type": "string", "maxLength": 500 },
+        "agentId": { "type": "string", "maxLength": 128 },
+        "featured": { "type": "boolean" },
+        "publicationStatus": { "type": "string", "enum": ["published", "draft", "archived"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "slug", "price", "propertyType", "listingType", "publicationStatus"]
+    },
+    "Enquiry": {
+      "title": "Enquiry",
+      "description": "Property lead or customer enquiry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "referenceNumber": { "type": "string", "maxLength": 50 },
+        "propertyId": { "type": "string", "maxLength": 128 },
+        "propertyTitleSnapshot": { "type": "string", "maxLength": 200 },
+        "customerUid": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "customerEmail": { "type": "string", "maxLength": 100 },
+        "customerPhone": { "type": "string", "maxLength": 30 },
+        "enquiryType": { "type": "string", "enum": ["general", "price_quote", "site_visit", "callback", "valuation"] },
+        "message": { "type": "string", "maxLength": 2000 },
+        "source": { "type": "string", "maxLength": 50 },
+        "assignedAgentId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["New", "Contacted", "Qualified", "Site Visit Requested", "Site Visit Scheduled", "Negotiation", "Converted", "Closed", "Not Interested"] },
+        "internalNotes": { "type": "string", "maxLength": 5000 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["customerName", "customerEmail", "message", "status"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Site visit booking request",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "propertyId": { "type": "string", "maxLength": 128 },
+        "propertyTitleSnapshot": { "type": "string", "maxLength": 200 },
+        "customerUid": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "customerEmail": { "type": "string", "maxLength": 100 },
+        "customerPhone": { "type": "string", "maxLength": 30 },
+        "requestedDate": { "type": "string", "maxLength": 30 },
+        "requestedTime": { "type": "string", "maxLength": 30 },
+        "assignedAgentId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "rescheduled", "cancelled", "completed"] },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["propertyId", "customerName", "customerEmail", "requestedDate", "status"]
+    },
+    "SavedProperty": {
+      "title": "SavedProperty",
+      "description": "Customer bookmarked property record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "customerUid": { "type": "string", "maxLength": 128 },
+        "propertyId": { "type": "string", "maxLength": 128 },
+        "propertyTitle": { "type": "string", "maxLength": 200 },
+        "propertyPrice": { "type": "number" },
+        "propertyImage": { "type": "string", "maxLength": 500 },
+        "propertyLocation": { "type": "string", "maxLength": 200 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["customerUid", "propertyId"]
+    },
+    "Agent": {
+      "title": "Agent",
+      "description": "Sandpiper real estate consultant profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "bio": { "type": "string", "maxLength": 2000 },
+        "photoUrl": { "type": "string", "maxLength": 500 },
+        "active": { "type": "boolean" },
+        "assignedListingsCount": { "type": "number" }
+      },
+      "required": ["name", "email", "role"]
+    },
+    "Testimonial": {
+      "title": "Testimonial",
+      "description": "Customer review and testimonial",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "author": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "maxLength": 100 },
+        "content": { "type": "string", "maxLength": 1000 },
+        "rating": { "type": "number" },
+        "approved": { "type": "boolean" },
+        "featured": { "type": "boolean" }
+      },
+      "required": ["author", "content", "rating"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Website branding, contact, and operational settings",
+      "type": "object",
+      "properties": {
+        "companyName": { "type": "string", "maxLength": 100 },
+        "tagline": { "type": "string", "maxLength": 200 },
+        "email": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "whatsapp": { "type": "string", "maxLength": 30 },
+        "officeAddress": { "type": "string", "maxLength": 300 },
+        "currency": { "type": "string", "maxLength": 10 },
+        "currencySymbol": { "type": "string", "maxLength": 5 }
+      },
+      "required": ["companyName", "email", "phone"]
+    }
+  },
+  "firestore": {
+    "/properties/{propertyId}": {
+      "schema": "Property",
+      "description": "Property listings accessible to public if published, managed by admins and agents"
+    },
+    "/enquiries/{enquiryId}": {
+      "schema": "Enquiry",
+      "description": "Customer leads and enquiries, visible to submitter or admin/agent"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Site visit scheduling requests"
+    },
+    "/savedProperties/{savedId}": {
+      "schema": "SavedProperty",
+      "description": "User saved property bookmarks"
+    },
+    "/agents/{agentId}": {
+      "schema": "Agent",
+      "description": "Real estate agent profiles"
+    },
+    "/testimonials/{testimonialId}": {
+      "schema": "Testimonial",
+      "description": "Approved client testimonials"
+    },
+    "/siteSettings/{settingsId}": {
+      "schema": "SiteSettings",
+      "description": "Global website configuration and contact info"
+    }
+  }
+}

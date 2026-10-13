@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-navy: #0B192C;
+    --brand-navy-light: #1E3E62;
+    --brand-sand: #C5A880;
+    --brand-sand-light: #F4EFE6;
+    --brand-ivory: #FAF8F5;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #FAF8F5;
+    color: #1A1A1A;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-brand {
+    font-family: 'Cinzel', serif;
+  }
+}
+
+/* Custom scrollbars for dashboard and modals */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ede6;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5a880;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a88b64;
+}

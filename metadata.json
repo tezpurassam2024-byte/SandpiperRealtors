@@ -1,0 +1,6 @@
+{
+  "name": "Sandpiper Realtors",
+  "description": "Premium full-stack real estate platform for luxury residences, commercial estates, and architectural developments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
